@@ -14,9 +14,28 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+import os
 from django.contrib import admin
 from django.urls import path
+from django.http import JsonResponse
+
+
+# Helper to get codespace URL
+def get_codespace_url(component):
+    codespace_name = os.environ.get('CODESPACE_NAME', 'localhost')
+    return f"https://{codespace_name}-8000.app.github.dev/api/{component}/"
+
+# Example API endpoint for demonstration
+def api_root(request):
+    codespace_name = os.environ.get('CODESPACE_NAME', 'localhost')
+    api_url = f"https://{codespace_name}-8000.app.github.dev/api/activities/"
+    return JsonResponse({
+        "message": "Welcome to Octofit Tracker API!",
+        "example_endpoint": api_url
+    })
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', api_root),
 ]
